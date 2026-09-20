@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cottage Opening Checklist</title>
+<style>
+  :root {
+    --bg: #f5f1e8;
+    --card-bg: #ffffff;
+    --border: #d9d2c2;
+    --text: #2e2a24;
+    --muted: #756e60;
+    --green: #2e7d4f;
+    --green-light: #e6f4ea;
+    --section-bg: #efe9d8;
+    --accent: #8a6d3b;
+    --red: #b3453c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0 16px 48px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  header {
+    max-width: 640px;
+    margin: 0 auto;
+    padding-top: 24px;
+  }
+  h1 {
+    font-size: 1.5rem;
+    margin: 0 0 4px;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin: 0 0 16px;
+  }
+  .progress-wrap {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .progress-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .progress-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: var(--section-bg);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--green);
+    width: 0%;
+    transition: width 0.2s ease;
+  }
+  #resetBtn {
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--muted);
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  #resetBtn:hover {
+    background: var(--section-bg);
+    color: var(--text);
+  }
+  .add-item-wrap {
+    margin-bottom: 20px;
+  }
+  #addItemToggle {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    border: 1px dashed var(--accent);
+    background: var(--card-bg);
+    color: var(--accent);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  #addItemToggle:hover {
+    background: var(--green-light);
+  }
+  .add-item-note {
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--muted);
+  }
+  #addItemForm {
+    display: none;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 10px;
+  }
+  #addItemForm.open {
+    display: block;
+  }
+  .field-label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--accent);
+    margin: 10px 0 4px;
+  }
+  .field-label:first-child {
+    margin-top: 0;
+  }
+  #addItemForm select,
+  #addItemForm input[type="text"],
+  #addItemForm textarea {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    color: var(--text);
+    background: #fffdf9;
+    resize: vertical;
+  }
+  #addItemForm textarea {
+    min-height: 46px;
+  }
+  .add-item-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  #submitNewItem {
+    flex: 1;
+    background: var(--green);
+    color: #fff;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #submitNewItem:hover {
+    background: #256541;
+  }
+  #cancelNewItem {
+    background: var(--card-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  #cancelNewItem:hover {
+    background: var(--section-bg);
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .section {
+    margin-bottom: 24px;
+  }
+  .section-title {
+    font-weight: 700;
+    color: var(--accent);
+    margin: 0 0 8px 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 0.85rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .item {
+    border-bottom: 1px solid var(--border);
+  }
+  .item:last-child {
+    border-bottom: none;
+  }
+  .item-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+  }
+  .check-circle {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 2px solid #b9b09a;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-top: 1px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+  .check-circle svg {
+    width: 15px;
+    height: 15px;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+  }
+  .item.checked .check-circle {
+    background: var(--green);
+    border-color: var(--green);
+  }
+  .item.checked .check-circle svg {
+    opacity: 1;
+  }
+  .item-text-wrap {
+    flex: 1;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .item-text {
+    font-size: 1rem;
+    line-height: 1.35;
+    transition: color 0.15s ease;
+  }
+  .item.checked .item-text {
+    color: var(--muted);
+    text-decoration: line-through;
+    text-decoration-color: var(--green);
+    text-decoration-thickness: 2px;
+  }
+  .disclosure-arrow {
+    flex: 0 0 auto;
+    font-size: 1.3rem;
+    line-height: 1;
+    color: var(--accent);
+    margin-top: -2px;
+    transition: transform 0.15s ease;
+  }
+  .item.open .disclosure-arrow {
+    transform: scaleY(-1);
+  }
+  .remove-btn {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--red);
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-top: 1px;
+  }
+  .remove-btn:hover {
+    background: #fbe9e7;
+  }
+  .detail {
+    display: none;
+    padding: 0 14px 14px 52px;
+  }
+  .item.open .detail {
+    display: block;
+  }
+  .how-box {
+    background: var(--section-bg);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: var(--text);
+  }
+  .how-label {
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    display: block;
+    margin-bottom: 3px;
+  }
+  .why-toggle {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 10px;
+    font-size: 0.72rem;
+    color: var(--green);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    text-decoration: none;
+    background: var(--green-light);
+    border: 1px solid var(--green);
+    border-radius: 999px;
+    vertical-align: middle;
+    white-space: nowrap;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .why-toggle:hover {
+    background: var(--green);
+    color: #fff;
+  }
+  .why-box {
+    display: none;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    font-size: 0.88rem;
+    line-height: 1.4;
+    color: var(--text);
+    font-style: italic;
+  }
+  .why-box.open {
+    display: block;
+  }
+  .custom-tag {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--green);
+    background: var(--green-light);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  footer {
+    max-width: 640px;
+    margin: 32px auto 0;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Cottage Opening Checklist</h1>
+  <p class="subtitle">Tap the circle to check off. Tap an item for how (and why).</p>
+  <div class="progress-wrap">
+    <span class="progress-text" id="progressText">0 / 0</span>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <button id="resetBtn">Reset</button>
+  </div>
+
+  <div class="add-item-wrap">
+    <button id="addItemToggle" type="button">
+      <span id="addItemToggleLabel">+ Add Item</span>
+      <span class="add-item-note">(saved in this browser only — not synced across devices)</span>
+    </button>
+    <div id="addItemForm">
+      <label class="field-label" for="newItemSection">Section</label>
+      <select id="newItemSection"></select>
+
+      <label class="field-label" for="newItemText">Item</label>
+      <input type="text" id="newItemText" placeholder="e.g. Fill the bird feeders">
+
+      <label class="field-label" for="newItemHow">How <span style="font-weight:400; text-transform:none; letter-spacing:normal;">(optional)</span></label>
+      <textarea id="newItemHow" placeholder="Details on how to do it"></textarea>
+
+      <label class="field-label" for="newItemWhy">Why <span style="font-weight:400; text-transform:none; letter-spacing:normal;">(optional)</span></label>
+      <textarea id="newItemWhy" placeholder="Why it matters"></textarea>
+
+      <div class="add-item-actions">
+        <button id="submitNewItem" type="button">Add Item</button>
+        <button id="cancelNewItem" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main id="main"></main>
+
+<footer>Progress and any items you add are saved on this device. Tap Reset before your next opening.</footer>
+
+<script>
+const DATA = [
+  {
+    section: "Main Floor",
+    items: [
+      { id: "mf1", text: "Unlock door facing parking", how: "Rotate the latch on the inside of the door handle 45 degrees.", why: "So you don't have to enter the code every time you enter the door." },
+      { id: "mf2", text: "Turn on furnace", how: "Thermostat (on the right) outside the Millview Suite — set the temp; 68–70°F is comfortable.", why: "Cold seasons." },
+      { id: "mf3", text: "Turn OFF HRV (windows open)", how: "Control unit outside the Millview Suite (on the left) — turn OFF power.", why: "Wastes electricity when there's already airflow through the building. This unit controls moisture and airflow, and in summer, when windows are likely to be open, it shouldn't be on." },
+      { id: "mf4", text: "Turn ON HRV (windows closed)", how: "Control unit outside the Millview Suite (on the left) — turn ON power.", why: "Helps reduce mustiness in any season, only when windows are closed — good to leave on when you leave too (see Closing)." },
+      { id: "mf5", text: "Fridges — avoid food downstairs", how: "Drinks and ice packs only in the basement fridge if you can manage it.", why: "The backup power (Generac) doesn't power the downstairs fridge. We generally try not to leave food in either fridge/freezer, but if you did and the power went out downstairs, the food would spoil (e.g. a frozen pizza)." },
+      { id: "mf6", text: "Pantry recycling", how: "Make sure there's a clear bag installed in the blue bin, and a paper recycling bag ready.", why: "" }
+    ]
+  },
+  {
+    section: "Basement",
+    items: [
+      { id: "bs1", text: "Turn on water", how: "Downstairs near the door — turn on the switch, then rotate the two blue shutoff valves near the power switch. Parallel is open, perpendicular is closed.", why: "So bathrooms are functional right away." },
+      { id: "bs2", text: "Water heater", how: "Downstairs, electrical panel — flip the water heater breakers to center.", why: "" },
+      { id: "bs3", text: "Power to cabins (only if using)", how: "At the main panel under the foyer in the basement. Breaker facing center is on. Each cabin is a double breaker — they move together.", why: "" },
+      { id: "bs4", text: "Water filter alarm", how: "If the water filter alarm is going off, unplug it for 30 seconds then plug it back in.", why: "This is a wifi thing — it's trying to connect to wifi, and if it can't, the alarm goes off. The replacement schedule is already tracked; the system works fine, this is just an annoying technical quirk of the water system." }
+    ]
+  },
+  {
+    section: "Shh!ed (only if using)",
+    items: [
+      { id: "sh1", text: "Turn on power", how: "Utility box near the ladder. Make sure the breaker is set correctly too — pointed to the middle.", why: "" },
+      { id: "sh2", text: "Turn on mini HRV (winter only, when windows shut)", how: "Climb the ladder to the top level and look on the wall facing the main cottage for the white square fan unit. Plug it in and make sure it's on. Set it to the setting with arrows facing both directions (fan sucks in for a while, then blows out for a while). Start on low.", why: "The mini HRV vents moist air out of the building. Moist air freezes — more than once somebody has been locked in because the door froze shut." },
+      { id: "sh3", text: "Open windows to air out as desired", how: "Not when the mini HRV is on in winter. Beware of rain — windows should be mostly shut when it rains. Upper windows are best fully open on hot days.", why: "" }
+    ]
+  },
+  {
+    section: "Sleeping Cabin (only if using)",
+    items: [
+      { id: "sc1", text: "Turn on power", how: "Utility box on the wall facing Shh!ed. Make sure the breaker is set correctly too — pointed to the middle.", why: "" },
+      { id: "sc2", text: "Plug in fridge and shut door", how: "Only if you plan to use it — otherwise leave the door open.", why: "Always leave it open when unplugged to avoid mold buildup." },
+      { id: "sc3", text: "Power on water pump (not winter/freezing weather)", how: "Outside near the pump, plug it in — then turn on the tap behind you on the milk carton until water flows freely, then close it. Then go up to the wash stand and do the same. Then go into the back changeroom with the sinks and do the same. Check quickly for leaks and pump cycling once all taps are closed — only use if there's no cycling (that usually means a leak). If this is the first use of the season, check connections too, e.g. under the cabin sink in the crawl space.", why: "" },
+      { id: "sc4", text: "Check outhouse for TP", how: "", why: "" },
+      { id: "sc5", text: "Check outhouse for peat", how: "", why: "" },
+      { id: "sc6", text: "Outhouse seat: down in summer, up in winter", how: "", why: "When down, smell vents up the stack, not into the building. In winter, leave the seat up because moisture builds up and freezes shut." }
+    ]
+  }
+];
+
+const STATE_KEY = "cottageOpeningChecklistState";
+const CUSTOM_KEY = "cottageOpeningCustomItems";
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STATE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+function saveState(state) {
+  try {
+    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+  } catch (e) {}
+}
+
+function loadCustomItems() {
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveCustomItems(items) {
+  try {
+    localStorage.setItem(CUSTOM_KEY, JSON.stringify(items));
+  } catch (e) {}
+}
+
+let state = loadState();
+let customItems = loadCustomItems();
+
+function itemsForSection(section) {
+  return section.items.concat(customItems.filter(ci => ci.section === section.section));
+}
+
+function allItems() {
+  return DATA.flatMap(s => itemsForSection(s));
+}
+
+function updateProgress() {
+  const items = allItems();
+  const total = items.length;
+  const done = items.filter(i => state[i.id]).length;
+  document.getElementById("progressText").textContent = `${done} / ${total}`;
+  const pct = total ? Math.round((done / total) * 100) : 0;
+  document.getElementById("progressFill").style.width = pct + "%";
+}
+
+function toggleCheck(id) {
+  state[id] = !state[id];
+  saveState(state);
+  const itemEl = document.querySelector(`.item[data-id="${CSS.escape(id)}"]`);
+  if (itemEl) itemEl.classList.toggle("checked", !!state[id]);
+  updateProgress();
+}
+
+function toggleOpen(id) {
+  const itemEl = document.querySelector(`.item[data-id="${CSS.escape(id)}"]`);
+  if (itemEl && itemEl.classList.contains("has-detail")) {
+    itemEl.classList.toggle("open");
+  }
+}
+
+function toggleWhy(id) {
+  const box = document.querySelector(`.why-box[data-id="${CSS.escape(id)}"]`);
+  if (box) box.classList.toggle("open");
+}
+
+function removeCustomItem(id) {
+  customItems = customItems.filter(ci => ci.id !== id);
+  saveCustomItems(customItems);
+  if (state[id]) {
+    delete state[id];
+    saveState(state);
+  }
+  render();
+}
+
+function buildItemEl(item) {
+  const hasHow = !!item.how;
+  const hasWhy = !!item.why;
+  const hasDetail = hasHow || hasWhy;
+
+  const itemEl = document.createElement("div");
+  itemEl.className = "item" + (hasDetail ? " has-detail" : "") + (state[item.id] ? " checked" : "");
+  itemEl.setAttribute("data-id", item.id);
+
+  const row = document.createElement("div");
+  row.className = "item-row";
+
+  const circle = document.createElement("button");
+  circle.className = "check-circle";
+  circle.setAttribute("aria-label", "Toggle done: " + item.text);
+  circle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  circle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleCheck(item.id);
+  });
+
+  const textWrap = document.createElement("div");
+  textWrap.className = "item-text-wrap";
+  const textEl = document.createElement("div");
+  textEl.className = "item-text";
+  textEl.textContent = item.text;
+  textWrap.appendChild(textEl);
+  if (item.custom) {
+    const tag = document.createElement("span");
+    tag.className = "custom-tag";
+    tag.textContent = "added";
+    textEl.appendChild(tag);
+  }
+  if (hasDetail) {
+    const arrow = document.createElement("span");
+    arrow.className = "disclosure-arrow";
+    arrow.textContent = "▾";
+    textWrap.appendChild(arrow);
+    textWrap.addEventListener("click", () => toggleOpen(item.id));
+  }
+
+  row.appendChild(circle);
+  row.appendChild(textWrap);
+
+  if (item.custom) {
+    const removeBtn = document.createElement("button");
+    removeBtn.className = "remove-btn";
+    removeBtn.setAttribute("aria-label", "Remove item: " + item.text);
+    removeBtn.textContent = "×";
+    removeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (confirm(`Remove "${item.text}"?`)) {
+        removeCustomItem(item.id);
+      }
+    });
+    row.appendChild(removeBtn);
+  }
+
+  itemEl.appendChild(row);
+
+  if (hasDetail) {
+    const detail = document.createElement("div");
+    detail.className = "detail";
+
+    const howBox = document.createElement("div");
+    howBox.className = "how-box";
+
+    if (hasHow) {
+      const howLabel = document.createElement("span");
+      howLabel.className = "how-label";
+      howLabel.textContent = "How";
+      howBox.appendChild(howLabel);
+      const howText = document.createElement("span");
+      howText.textContent = item.how;
+      howBox.appendChild(howText);
+    }
+
+    if (hasWhy) {
+      const whyToggle = document.createElement("div");
+      whyToggle.className = "why-toggle";
+      whyToggle.textContent = "Why?";
+      whyToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleWhy(item.id);
+      });
+      howBox.appendChild(whyToggle);
+
+      const whyBox = document.createElement("div");
+      whyBox.className = "why-box";
+      whyBox.setAttribute("data-id", item.id);
+      whyBox.textContent = item.why;
+      howBox.appendChild(whyBox);
+    }
+
+    detail.appendChild(howBox);
+    itemEl.appendChild(detail);
+  }
+
+  return itemEl;
+}
+
+function render() {
+  const main = document.getElementById("main");
+  main.innerHTML = "";
+
+  DATA.forEach(section => {
+    const sectionEl = document.createElement("div");
+    sectionEl.className = "section";
+
+    const titleEl = document.createElement("div");
+    titleEl.className = "section-title";
+    titleEl.textContent = section.section;
+    sectionEl.appendChild(titleEl);
+
+    const card = document.createElement("div");
+    card.className = "card";
+
+    itemsForSection(section).forEach(item => {
+      card.appendChild(buildItemEl(item));
+    });
+
+    sectionEl.appendChild(card);
+    main.appendChild(sectionEl);
+  });
+
+  updateProgress();
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (confirm("Reset all checked items for next time?")) {
+    state = {};
+    saveState(state);
+    render();
+  }
+});
+
+// --- Add item form ---
+const addItemToggle = document.getElementById("addItemToggle");
+const addItemToggleLabel = document.getElementById("addItemToggleLabel");
+const addItemForm = document.getElementById("addItemForm");
+const newItemSection = document.getElementById("newItemSection");
+const newItemText = document.getElementById("newItemText");
+const newItemHow = document.getElementById("newItemHow");
+const newItemWhy = document.getElementById("newItemWhy");
+
+DATA.forEach(section => {
+  const opt = document.createElement("option");
+  opt.value = section.section;
+  opt.textContent = section.section;
+  newItemSection.appendChild(opt);
+});
+
+function resetAddItemForm() {
+  newItemText.value = "";
+  newItemHow.value = "";
+  newItemWhy.value = "";
+  newItemSection.selectedIndex = 0;
+}
+
+function closeAddItemForm() {
+  addItemForm.classList.remove("open");
+  addItemToggleLabel.textContent = "+ Add Item";
+}
+
+function openAddItemForm() {
+  addItemForm.classList.add("open");
+  addItemToggleLabel.textContent = "− Close";
+  newItemText.focus();
+}
+
+addItemToggle.addEventListener("click", () => {
+  if (addItemForm.classList.contains("open")) {
+    closeAddItemForm();
+  } else {
+    openAddItemForm();
+  }
+});
+
+document.getElementById("cancelNewItem").addEventListener("click", () => {
+  resetAddItemForm();
+  closeAddItemForm();
+});
+
+document.getElementById("submitNewItem").addEventListener("click", () => {
+  const text = newItemText.value.trim();
+  if (!text) {
+    newItemText.focus();
+    return;
+  }
+  const newItem = {
+    id: "custom-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 7),
+    section: newItemSection.value,
+    text: text,
+    how: newItemHow.value.trim(),
+    why: newItemWhy.value.trim(),
+    custom: true
+  };
+  customItems.push(newItem);
+  saveCustomItems(customItems);
+  resetAddItemForm();
+  closeAddItemForm();
+  render();
+});
+
+render();
+</script>
+
+</body>
+</html>
