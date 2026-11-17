@@ -120,6 +120,13 @@
   .add-item-wrap {
     margin-bottom: 20px;
   }
+  .tap-hint {
+    margin: 10px 0 0;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--green);
+  }
   #addItemToggle {
     width: 100%;
     display: flex;
@@ -236,10 +243,14 @@
   .item:last-child {
     border-bottom: none;
   }
-  .item.zero {
-    background: var(--green-light);
+  /* Row colour follows the item's gauge zone */
+  .item.lvl-green {
+    background: #e6f4ea;
   }
-  .item.needed {
+  .item.lvl-yellow {
+    background: #fbf0d4;
+  }
+  .item.lvl-red {
     background: #fbe0da;
   }
   .item-row {
@@ -481,7 +492,7 @@
     <button id="resetBtn" title="Set every item back to 0 needed, 100% level, no details — asks first">Reset All</button>
   </div>
 
-  <p class="subtitle">Tap an item to set how much is left (▲/▼ by 5%, or type a number) and add details. Bump the number up when something's running low. Whoever's shopping checks here first — then either sets the item to 0 or hits Reset All. Everyone who opens this page sees and edits the same live list.</p>
+  <p class="subtitle">Bump the number when needed; 0 once bought.</p>
 
   <div class="config-banner" id="configBanner">
     Firebase isn't configured yet for this page. Open <code>cottage-low-or-out.html</code> and fill in the <code>firebaseConfig</code> object near the top of the script with your project's web config, then republish. See the setup notes at the bottom of the file.
@@ -504,14 +515,13 @@
         <button id="cancelNewItem" type="button">Cancel</button>
       </div>
     </div>
+    <p class="tap-hint">Tap item to add or view details</p>
   </div>
 </header>
 
 <main id="main">
   <div class="card"><div class="empty-note">Loading…</div></div>
 </main>
-
-<footer>baxterjamie-source / cottage</footer>
 
 <!-- Firebase (compat SDK — no build step needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
@@ -615,9 +625,10 @@ function miniGaugeSvg(pct) {
 }
 
 function itemRowHtml(item, idx) {
-  const stateClass = item.qty > 0 ? ' needed' : ' zero';
   const isOpen = openIds.has(item.id);
   const level = getLevel(item);
+  // Same thirds as the gauge: red 0–33, yellow 34–66, green 67–100
+  const stateClass = level <= 33 ? ' lvl-red' : level <= 66 ? ' lvl-yellow' : ' lvl-green';
   const details = item.details || "";
   const id = escapeHtml(String(item.id));
   const name = escapeHtml(item.name);
