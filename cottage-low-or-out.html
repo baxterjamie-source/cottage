@@ -500,7 +500,8 @@
     position: absolute;
     left: 0;
     bottom: 0;
-    font-size: 0.7rem;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
   }
 </style>
 </head>
@@ -556,7 +557,7 @@
 
 <footer>
   Changes Automatically Saved
-  <span class="version">v1.1</span>
+  <span class="version" id="app-version">v1.1</span>
 </footer>
 
 <!-- Firebase (compat SDK — no build step needed) -->
@@ -577,6 +578,9 @@ const firebaseConfig = {
   messagingSenderId: "1061783772523",
   appId: "1:1061783772523:web:5f6118355535b46862c02e"
 };
+
+const APP_VERSION = '1.1'; // shown bottom left; bump with each release
+document.getElementById('app-version').textContent = 'v' + APP_VERSION;
 
 const DOC_PATH = { collection: "cottage", doc: "lowStock" };
 
