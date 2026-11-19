@@ -20,7 +20,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    padding: 0 16px 48px;
+    padding: 0 16px 6px;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -488,18 +488,17 @@
     font-size: 0.9rem;
   }
   footer {
-    position: relative;
     max-width: 640px;
     margin: 32px auto 0;
-    padding: 0 40px;
     text-align: center;
     color: var(--muted);
     font-size: 0.78rem;
   }
+  /* Version label: last thing on the page, bottom left */
   .version {
-    position: absolute;
-    left: 0;
-    bottom: 0;
+    margin: 40px 0 0;
+    text-align: left;
+    color: var(--muted);
     font-size: 11px;
     font-variant-numeric: tabular-nums;
   }
@@ -555,10 +554,8 @@
   <div class="card"><div class="empty-note">Loading…</div></div>
 </main>
 
-<footer>
-  Changes Automatically Saved
-  <span class="version" id="app-version">v1.1</span>
-</footer>
+<footer>Changes Automatically Saved</footer>
+<p class="version" id="app-version">v1.1</p>
 
 <!-- Firebase (compat SDK — no build step needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
