@@ -20,7 +20,7 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    padding: 0 16px 6px;
+    padding: 0 16px 48px;
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -494,10 +494,15 @@
     color: var(--muted);
     font-size: 0.78rem;
   }
-  /* Version label: last thing on the page, bottom left */
+  /* Version label, pinned to the bottom-left corner of the screen (as in Balderlaugh) */
   .version {
-    margin: 40px 0 0;
-    text-align: left;
+    position: fixed;
+    left: calc(env(safe-area-inset-left, 0px) + 8px);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 6px);
+    z-index: 47;
+    margin: 0;
+    pointer-events: none;
+    user-select: none;
     color: var(--muted);
     font-size: 11px;
     font-variant-numeric: tabular-nums;
