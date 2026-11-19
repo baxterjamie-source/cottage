@@ -488,11 +488,19 @@
     font-size: 0.9rem;
   }
   footer {
+    position: relative;
     max-width: 640px;
     margin: 32px auto 0;
+    padding: 0 40px;
     text-align: center;
     color: var(--muted);
     font-size: 0.78rem;
+  }
+  .version {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    font-size: 0.7rem;
   }
 </style>
 </head>
@@ -545,6 +553,11 @@
 <main id="main">
   <div class="card"><div class="empty-note">Loading…</div></div>
 </main>
+
+<footer>
+  Changes Automatically Saved
+  <span class="version">v1.1</span>
+</footer>
 
 <!-- Firebase (compat SDK — no build step needed) -->
 <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
